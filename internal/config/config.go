@@ -15,7 +15,7 @@ type Config struct {
 }
 
 func Load() *Config {
-	godotenv.Load("../../.env") // грузим .env файл
+	godotenv.Load() // грузим .env файл
 	prompt_ver := os.Getenv("PROMPT_VERSION")
 	return &Config{
 		OpenAIKey:     os.Getenv("OpenAIKey"),
