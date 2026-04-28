@@ -38,7 +38,6 @@ func ConnectToDB() *sqlx.DB {
 }
 
 func EnvInitialization() error {
-	panic("Database url=" + os.Getenv("DATABASE_URL"))
 	DB = ConnectToDB()
 	// Если используете embed — без аргументов
 	d, err := goalsdata.LoadData("internal/goalsdata/goals.json")
