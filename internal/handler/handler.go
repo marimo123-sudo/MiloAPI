@@ -39,7 +39,7 @@ func send_hello(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func HandleAllFuncs() {
+func HandleAllFuncs() http.Handler {
 	r := mux.NewRouter()
 	r.Use(loggingMiddleware)
 	r.HandleFunc("/", send_hello).Methods("GET")
@@ -47,6 +47,5 @@ func HandleAllFuncs() {
 
 	UsersHandler(r)
 	HandleAIDialog(r)
-	log.Println("Server starting on :8443")
-	log.Fatal(http.ListenAndServe(":8443", r))
+	return r
 }

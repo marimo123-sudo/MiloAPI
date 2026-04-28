@@ -5,16 +5,24 @@ import (
 	"api/internal/initialize"
 	"log"
 	"net/http"
+	"sync"
 )
 
-func main() {
-	if err := initialize.EnvInitialization(); err != nil {
-		log.Fatal(err)
-	}
-	// Эндпоинт для получения временного токена (безопасная передача клиенту)
-	handler.HandleAllFuncs()
+var (
+	router http.Handler
+	once   sync.Once
+)
 
-	log.Printf("Server started at http://localhost:%s", initialize.CFG.Port)
-	log.Fatal(http.ListenAndServe(":"+initialize.CFG.Port, nil))
-
+func init() {
+	once.Do(func() {
+		if err := initialize.EnvInitialization(); err != nil {
+			log.Fatal(err)
+		}
+		router = handler.HandleAllFuncs()
+	})
 }
+
+func Handler(w http.ResponseWriter, r *http.Request) {
+	router.ServeHTTP(w, r)
+}
+
