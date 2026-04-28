@@ -46,6 +46,7 @@ func HandleAllFuncs() {
 	r.Use(loggingMiddleware)
 
 	UsersHandler(r)
+	HandleAIDialog(r)
 	log.Println("Server starting on :8443")
 	log.Fatal(http.ListenAndServe(":8443", r))
 }
