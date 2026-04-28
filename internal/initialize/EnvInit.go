@@ -17,9 +17,14 @@ var DB *sqlx.DB
 var Data *goalsdata.Data
 
 func ConnectToDB() *sqlx.DB {
-	databaseURL := os.Getenv("DATABASE_URL")
+	// Используем POSTGRES_URL, которую предоставила интеграция Supabase
+	databaseURL := os.Getenv("POSTGRES_URL")
 	if databaseURL == "" {
-		log.Fatal("DATABASE_URL environment variable is not set")
+		// Fallback на DATABASE_URL на всякий случай
+		databaseURL = os.Getenv("DATABASE_URL")
+	}
+	if databaseURL == "" {
+		log.Fatal("POSTGRES_URL or DATABASE_URL environment variable is not set")
 	}
 	db, err := sqlx.Connect("pgx", databaseURL)
 	if err != nil {
