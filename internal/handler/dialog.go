@@ -70,6 +70,7 @@ func GetAnswer(w http.ResponseWriter, r *http.Request) {
 				"status":  "error",
 				"message": "Couldn't get users wordlist",
 			}, http.StatusInternalServerError)
+			return
 		}
 		goal_id := list_of_phrases[0].GoalID
 		theme_id := list_of_phrases[0].ThemeID
