@@ -5,9 +5,10 @@ import (
 	"api/internal/goalsdata"
 	"fmt"
 	"log"
+	"os"
 
+	_ "github.com/jackc/pgx/v5/stdlib" // правильный драйвер
 	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
 )
 
 var CFG *config.Config
@@ -16,20 +17,25 @@ var DB *sqlx.DB
 var Data *goalsdata.Data
 
 func ConnectToDB() *sqlx.DB {
-	connStr := "host=localhost port=5432 user=postgres dbname=server sslmode=disable"
-	db, err := sqlx.Connect("postgres", connStr)
+	databaseURL := os.Getenv("DATABASE_URL")
+	if databaseURL == "" {
+		log.Fatal("DATABASE_URL environment variable is not set")
+	}
+	db, err := sqlx.Connect("pgx", databaseURL)
 	if err != nil {
 		log.Fatal("Ошибка подключения к БД: ", err)
 	}
 	if err = db.Ping(); err != nil {
 		log.Fatal("БД не отвечает: ", err)
 	}
+	log.Println("✅ Подключено к базе данных Supabase")
 	return db
 }
 
 func EnvInitialization() error {
 	DB = ConnectToDB()
-	d, err := goalsdata.LoadData("../../internal/goalsdata/goals.json")
+	// Если используете embed — без аргументов
+	d, err := goalsdata.LoadData("internal/goalsdata/goals.json")
 	if err != nil {
 		return fmt.Errorf("загрузка данных: %w", err)
 	}
