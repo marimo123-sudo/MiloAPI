@@ -19,7 +19,7 @@ func Load() *Config {
 	prompt_ver := os.Getenv("PROMPT_VERSION")
 	return &Config{
 		OpenAIKey:     os.Getenv("OpenAIKey"),
-		Port:          getEnv("PORT", "8080"),
+		Port:          getEnv("PORT", "443"),
 		PromptID:      os.Getenv("PROMPT_ID"),
 		PromptVersion: prompt_ver,
 	}
